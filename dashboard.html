@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Invoice App</title>
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.5/dist/tesseract.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+  <div class="container">
+    <header class="topbar">
+      <h1>📄 Invoice App</h1>
+    </header>
+
+    <!-- Landing Page -->
+    <section id="home" class="section active">
+      <h2>Welcome to the Invoice Dashboard</h2>
+      <div class="button-grid">
+        <button onclick="showSection('upload')">📤 Upload Invoice</button>
+        <button onclick="showSection('invoices')">📋 View Invoices</button>
+        <button onclick="showSection('summary')">📊 Summary</button>
+        <button onclick="showSection('grouped')">📂 Grouped View</button>
+        <button onclick="showSection('charts')">📈 Visual Charts</button>
+      </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section id="upload" class="section card" style="display:none;">
+      <button onclick="showSection('home')" class="back-btn">← Back</button>
+      <h2>Upload & Extract Invoice</h2>
+      <form id="uploadForm">
+        <input type="file" id="invoiceFile" accept=".jpg, .png" required>
+      
+      
+        <button type="submit" style="margin-top: 10px;">Upload & Analyze</button>
+      </form>
+      
+      <div id="uploadResult"></div>
+    </section>
+
+    <!-- Summary Section -->
+    <section id="summary" class="section card" style="display:none;">
+      <button onclick="showSection('home')" class="back-btn">← Back</button>
+      <h2>Summary</h2>
+      <p><strong>Total Paid:</strong> <span id="paidAmount"></span></p>
+      <p><strong>Total Overdue:</strong> <span id="overdueAmount"></span></p>
+      <div id="termSummaryContainer"></div>
+    </section>
+
+    <!-- Invoices Table Section -->
+    <section id="invoices" class="section card" style="display:none;">
+      <button onclick="showSection('home')" class="back-btn">← Back</button>
+      <h2>All Invoices</h2>
+      <input type="text" id="searchInput" placeholder="Search invoices..." oninput="searchInvoices()">
+      <button onclick="exportToExcel()">📤 Export to Excel</button>
+      <table border="1" width="100%" id="invoiceTable" style="margin-top: 20px;">
+        <thead>
+            <tr>
+              <th>Invoice ID</th>
+              <th>Vendor</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Payment Term</th>
+              <th>Due Date</th>
+              <th>Status</th>
+              <th>Tags</th> <!-- ✨ Added -->
+              <th>Actions</th>
+            </tr>
+          </thead>
+          
+        <tbody id="invoiceTableBody"></tbody>
+      </table>
+    </section>
+
+    <!-- Grouped View Section -->
+    <section id="grouped" class="section card" style="display:none;">
+      <button onclick="showSection('home')" class="back-btn">← Back</button>
+      <h2>Invoices Grouped by Payment Term</h2>
+      <div id="groupedByTermContainer"></div>
+    <!-- </section> -->
+
+    <!-- Charts Section -->
+    <section id="charts" class="section card" style="display:none;">
+      <button onclick="showSection('home')" class="back-btn">← Back</button>
+      <h2>Visual Charts</h2>
+      <canvas id="termChart" width="300" height="180"></canvas>
+      <canvas id="amountChart" width="300" height="180" style="margin-top:30px;"></canvas>
+    </section>
+  </div>
+
+  <!-- Link to JavaScript files -->
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+
+<!-- File Modal -->
+<div id="fileModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000000cc; z-index:9999;">
+  <div style="position:relative; width:85%; height:90%; margin:30px auto; background:white; border-radius:10px; overflow:hidden;">
+    <button onclick="closeFileModal()" style="position:absolute; top:10px; right:10px; font-size:18px;">✖</button>
+    <div id="fileViewerContainer" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+      <!-- Content inserted dynamically -->
+    </div>
+  </div>
+</div>
+
+  
+</body>
+</html>
